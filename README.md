@@ -2,7 +2,7 @@
 Generate and plot price combinations for two cryptocurrency tokens to reach a target portfolio value
 with specific token quantities.
 
-![Output](image.png)
+![Output](images/plot.png)
 
 Built with Python, CoinMarketCap API, and linear algebra.
 
@@ -17,4 +17,4 @@ Built with Python, CoinMarketCap API, and linear algebra.
 1. Save the bashrc file
 
 ## Usage
-Run the main.py script: `python3 main.py`
+Run the main.py script from root directory: `python3 src/main.py`

@@ -8,6 +8,7 @@ cycler==0.12.1
 dill==0.4.1
 fonttools==4.61.1
 idna==3.11
+iniconfig==2.3.0
 isort==7.0.0
 kiwisolver==1.4.9
 librt==0.7.8
@@ -20,8 +21,11 @@ packaging==26.0
 pathspec==1.0.4
 pillow==12.1.0
 platformdirs==4.5.1
+pluggy==1.6.0
+Pygments==2.19.2
 pylint==4.0.4
 pyparsing==3.3.2
+pytest==9.0.2
 python-dateutil==2.9.0.post0
 pytokens==0.4.0
 requests==2.32.5

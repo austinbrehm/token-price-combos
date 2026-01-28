@@ -7,6 +7,7 @@ class CoinMarketCapAPI:
     """Class to connect to and use the CoinMarketCap API."""
 
     BASE_URL = "https://pro-api.coinmarketcap.com/v2"
+    HEADER = "X-CMC_PRO_API_KEY"
 
     def __init__(self, api_key: str):
         """Initialize CoinMarketCapAPI class.
@@ -15,7 +16,7 @@ class CoinMarketCapAPI:
             api_key (str): CoinMarketCap API key.
         """
         self.api_key = api_key
-
+    
     def get_crypto_quotes(self, symbol: str, convert: str = "USD") -> dict:
         """Get latest cryptocurrency quotes from CoinMarketCap API.
 
@@ -28,7 +29,7 @@ class CoinMarketCapAPI:
         """
 
         url = f"{self.BASE_URL}/cryptocurrency/quotes/latest"
-        headers = {"X-CMC_PRO_API_KEY": self.api_key}
+        headers = {self.HEADER: self.api_key}
         request = requests.get(
             url, headers=headers, params={"symbol": symbol, "convert": convert}, timeout=10
         )
