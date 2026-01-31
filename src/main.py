@@ -19,9 +19,9 @@ if __name__ == "__main__":
 
     # TODO: add logic to check for valid token symbols
     # TODO: implement CLI to input parameters
-    FIRST_TOKEN = "POL"
-    SECOND_TOKEN = "DOGE"
-    HOLDINGS = {FIRST_TOKEN: 1000, SECOND_TOKEN: 10000}  # token amounts held
+    FIRST_TOKEN = "BTC"
+    SECOND_TOKEN = "ETH"
+    HOLDINGS = {FIRST_TOKEN: 0.1, SECOND_TOKEN: 3}  # token amounts held
     GOAL = 100_000  # in dollars
 
     tokens = {FIRST_TOKEN: 0, SECOND_TOKEN: 0}
@@ -29,6 +29,14 @@ if __name__ == "__main__":
         quotes = api.get_crypto_quotes(symbol=token)
         price = round(quotes["data"][token][0]["quote"]["USD"]["price"], 10)
         tokens[token] = price
+
+    if (
+        HOLDINGS[FIRST_TOKEN] * tokens[FIRST_TOKEN]
+        + HOLDINGS[SECOND_TOKEN] * tokens[SECOND_TOKEN]
+        >= GOAL
+    ):
+        print("✅ Target portfolio value already met. Stopping execution.")
+        sys.exit()
 
     print(
         f"Current Prices: {FIRST_TOKEN}: ${tokens[FIRST_TOKEN]:,}, "
@@ -43,14 +51,6 @@ if __name__ == "__main__":
     #    f"Prices Needed to Reach ${GOAL:,} at Current Ratio: "
     #    f"{FIRST_TOKEN} = ${token_prices[0]:,}, {SECOND_TOKEN} = ${token_prices[1]:}"
     #)
-
-    if (
-        HOLDINGS[FIRST_TOKEN] * tokens[FIRST_TOKEN]
-        + HOLDINGS[SECOND_TOKEN] * tokens[SECOND_TOKEN]
-        >= GOAL
-    ):
-        print("Target portfolio value already met.")
-        sys.exit()
 
     first_prices = [tokens[FIRST_TOKEN]]
     second_prices = [tokens[SECOND_TOKEN]]
@@ -77,8 +77,8 @@ if __name__ == "__main__":
         first_prices,
         second_prices,
         f"Token price combos to reach ${GOAL:,} with "
-        f"{HOLDINGS[FIRST_TOKEN]} {FIRST_TOKEN} and "
-        f"{HOLDINGS[SECOND_TOKEN]} {SECOND_TOKEN}",
+        f"{HOLDINGS[FIRST_TOKEN]:,} {FIRST_TOKEN} and "
+        f"{HOLDINGS[SECOND_TOKEN]:,} {SECOND_TOKEN}",
         f"Future Price of {FIRST_TOKEN} ($)",
         f"Future Price of {SECOND_TOKEN} ($)",
     )
