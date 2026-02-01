@@ -13,20 +13,37 @@ from utils import Utils
 from cmc_api import CoinMarketCapAPI
 
 if __name__ == "__main__":
-    colorama.init(autoreset=True)
     util = Utils()
+    api = CoinMarketCapAPI(api_key=util.get_api_key())
+    colorama.init(autoreset=True)
 
     # Define parameters.
-    # TODO: add logic to check for valid token symbols.
-    # TODO: implement CLI to input parameters.
-    FIRST_TOKEN = "BTC"
-    SECOND_TOKEN = "ETH"
-    HOLDINGS = {FIRST_TOKEN: 0.1, SECOND_TOKEN: 3}  # token amounts held
-    GOAL = 100_000  # in dollars
+    current_ids = api.get_id_map()
+    current_ids = {item["symbol"]: item["id"] for item in current_ids["data"]}
+
+    #with open ("token_id_map.json", "w", encoding="utf8") as f:
+    #    f.write(json.dumps(current_ids, indent=4))
+
+    FIRST_TOKEN = input("📋 Enter the symbol for the first token: ").upper()
+    SECOND_TOKEN = input("📋 Enter the symbol for the second token: ").upper()
+    HOLDINGS = {FIRST_TOKEN: 0, SECOND_TOKEN: 0}  # token amounts held
+    HOLDINGS[FIRST_TOKEN] = float(input(f"📋 Enter the amount of {FIRST_TOKEN} held: "))
+    HOLDINGS[SECOND_TOKEN] = float(input(f"📋 Enter the amount of {SECOND_TOKEN} held: "))
+    GOAL = int(input("📋 Enter the target portfolio value in USD (e.g., 10000): "))
+
+    symbols = [FIRST_TOKEN, SECOND_TOKEN]
+    for symbol in symbols:
+        if symbol not in current_ids:
+            print(
+                colorama.Fore.RED + "❌ Error: "
+                + colorama.Style.RESET_ALL
+                + f"Token symbol '{symbol}' not found in CoinMarketCap ID map. "
+                + "Check the symbol and try again."
+            )
+            sys.exit()
 
     # Get current prices from CoinMarketCap API.
-    api = CoinMarketCapAPI(api_key=util.get_api_key())
-
+    # TODO: search by ID instead of symbol
     tokens = {FIRST_TOKEN: 0, SECOND_TOKEN: 0}
     for token in tokens:
         quotes = api.get_crypto_quotes(symbol=token)
@@ -34,7 +51,7 @@ if __name__ == "__main__":
         tokens[token] = price
 
     print(
-        colorama.Fore.GREEN + "Current Prices\n" + colorama.Style.RESET_ALL +
+        colorama.Fore.GREEN + "\nCurrent Prices\n" + colorama.Style.RESET_ALL +
         f"💰 {FIRST_TOKEN}: ${tokens[FIRST_TOKEN]:,}\n"
         f"💰 {SECOND_TOKEN}: ${tokens[SECOND_TOKEN]:,}\n"
     )
