@@ -24,23 +24,42 @@ if __name__ == "__main__":
     #with open ("token_id_map.json", "w", encoding="utf8") as f:
     #    f.write(json.dumps(current_ids, indent=4))
 
+    # TODO: write function for this
     FIRST_TOKEN = input("📋 Enter the symbol for the first token: ").upper()
-    SECOND_TOKEN = input("📋 Enter the symbol for the second token: ").upper()
-    HOLDINGS = {FIRST_TOKEN: 0, SECOND_TOKEN: 0}  # token amounts held
+    while FIRST_TOKEN not in current_ids:
+        print(
+            colorama.Fore.RED + "❌ Error: "
+            + colorama.Style.RESET_ALL
+            + f"Token symbol '{FIRST_TOKEN}' not found in CoinMarketCap ID map. "
+        )
+        FIRST_TOKEN = input("📋 Enter the symbol for the first token: ").upper()
+    HOLDINGS = {FIRST_TOKEN: 0, }  # token amounts held
     HOLDINGS[FIRST_TOKEN] = float(input(f"📋 Enter the amount of {FIRST_TOKEN} held: "))
-    HOLDINGS[SECOND_TOKEN] = float(input(f"📋 Enter the amount of {SECOND_TOKEN} held: "))
-    GOAL = int(input("📋 Enter the target portfolio value in USD (e.g., 10000): "))
+    while HOLDINGS[FIRST_TOKEN] <= 0:
+        print(
+            colorama.Fore.RED + "❌ Error: "
+            + colorama.Style.RESET_ALL
+            + "Amount held must be a positive number."
+        )
+        HOLDINGS[FIRST_TOKEN] = float(input(f"📋 Enter the amount of {FIRST_TOKEN} held: "))
 
-    symbols = [FIRST_TOKEN, SECOND_TOKEN]
-    for symbol in symbols:
-        if symbol not in current_ids:
-            print(
-                colorama.Fore.RED + "❌ Error: "
-                + colorama.Style.RESET_ALL
-                + f"Token symbol '{symbol}' not found in CoinMarketCap ID map. "
-                + "Check the symbol and try again."
-            )
-            sys.exit()
+    SECOND_TOKEN = input("📋 Enter the symbol for the second token: ").upper()
+    while SECOND_TOKEN == FIRST_TOKEN:
+        print(
+            colorama.Fore.RED + "❌ Error: "
+            + colorama.Style.RESET_ALL
+            + "Second token symbol must be different from the first token symbol."
+        )
+        SECOND_TOKEN = input("📋 Enter the symbol for the second token: ").upper()
+    HOLDINGS[SECOND_TOKEN] = float(input(f"📋 Enter the amount of {SECOND_TOKEN} held: "))
+    while HOLDINGS[SECOND_TOKEN] <= 0:
+        print(
+            colorama.Fore.RED + "❌ Error: "
+            + colorama.Style.RESET_ALL
+            + "Amount held must be a positive number."
+        )
+        HOLDINGS[SECOND_TOKEN] = float(input(f"📋 Enter the amount of {SECOND_TOKEN} held: "))
+    GOAL = int(input("📋 Enter the target portfolio value in USD (e.g., 10000): "))
 
     # Get current prices from CoinMarketCap API.
     # TODO: search by ID instead of symbol
