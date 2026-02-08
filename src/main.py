@@ -24,7 +24,7 @@ if __name__ == "__main__":
     #with open ("token_id_map.json", "w", encoding="utf8") as f:
     #    f.write(json.dumps(current_ids, indent=4))
 
-    # TODO: write function for this
+    # TODO: write function for this and validate second token symbol
     FIRST_TOKEN = input("📋 Enter the symbol for the first token: ").upper()
     while FIRST_TOKEN not in current_ids:
         print(

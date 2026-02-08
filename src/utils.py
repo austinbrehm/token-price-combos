@@ -50,3 +50,4 @@ class Utils:
         fig_manager.full_screen_toggle()
         plt.savefig("images/price_combos.png")
         plt.show()
+        # TODO: figure out how to show plot when running in Docker container
