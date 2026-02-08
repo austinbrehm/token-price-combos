@@ -115,3 +115,9 @@ if __name__ == "__main__":
         f"Future Price of {FIRST_TOKEN} ($)",
         f"Future Price of {SECOND_TOKEN} ($)",
     )
+
+    print(
+        colorama.Fore.GREEN + "✅ Done! "
+        + colorama.Style.RESET_ALL
+        + "Plot saved to 'images/price_combos.png'."
+    )

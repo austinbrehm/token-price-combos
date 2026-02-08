@@ -42,10 +42,11 @@ class Utils:
         plt.title(title, loc="left", fontsize=14, style="italic", color="wheat")
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        fig_manager = plt.get_current_fig_manager()
-        fig_manager.full_screen_toggle()
         plt.legend()
         plt.grid(
             visible=True, which="both", color="gray", linestyle="--", linewidth=0.5
         )
+        fig_manager = plt.get_current_fig_manager()
+        fig_manager.full_screen_toggle()
+        plt.savefig("images/price_combos.png")
         plt.show()
