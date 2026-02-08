@@ -1,6 +1,5 @@
 """Utils class for common functions."""
 
-import subprocess
 import matplotlib.pyplot as plt
 
 
@@ -9,18 +8,19 @@ class Utils:
 
     @staticmethod
     def get_api_key() -> str:
-        """Get the CoinMarketCap API key from .bashrc file.
+        """Get the CoinMarketCap API key from .env file.
+
+        The key should be stored in the .env file in the format:
+        COINMARKETCAP_KEY="your_api_key_here"
 
         Returns:
-            key (str): CoinMarketCap API key, stored in .bashrc file.
+            key (str): CoinMarketCap API key, stored in .env file.
         """
-        key = subprocess.run(
-            "source ~/.bashrc && echo $COINMARKETCAP_KEY",
-            shell=True,
-            capture_output=True,
-            text=True,
-            check=True,
-        ).stdout.rstrip()
+        key = ""
+        with open("./.env", "r", encoding="utf8") as file:
+            for line in file:
+                if line.startswith("COINMARKETCAP_KEY="):
+                    key = line.split("=")[1].strip().strip('"')
 
         return key
 
