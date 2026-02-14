@@ -17,7 +17,7 @@ def get_token_info(id_map: dict) -> tuple[str, float]:
     Args:
         id_map (dict): Dictionary mapping token symbols to CoinMarketCap IDs.
     """
-    symbol = input("📋 Enter the symbol for the first token: ").upper()
+    symbol = input("📋 Enter the token symbol: ").upper()
 
     # Verify the symbol is in the CoinMarketCap ID map.
     while symbol not in id_map:
@@ -27,7 +27,7 @@ def get_token_info(id_map: dict) -> tuple[str, float]:
             + colorama.Style.RESET_ALL
             + f"Token symbol '{symbol}' not found in CoinMarketCap ID map. "
         )
-        symbol = input("📋 Enter the symbol for the first token: ").upper()
+        symbol = input("📋 Enter the token symbol: ").upper()
 
     quantity = input(f"📋 Enter the amount of {symbol} held: ")
 
@@ -52,7 +52,7 @@ def get_token_info(id_map: dict) -> tuple[str, float]:
 
 def get_goal() -> int:
     """Get target portfolio value from user input."""
-    goal = input("📋 Enter the target portfolio value in USD (e.g., 10000): ")
+    goal = input("📋 Enter the target portfolio value in USD: ")
 
     # Verify the goal is a positive integer.
     while True:
@@ -68,7 +68,7 @@ def get_goal() -> int:
                 + colorama.Style.RESET_ALL
                 + "Target portfolio value must be a positive integer."
             )
-            goal = input("📋 Enter the target portfolio value in USD (e.g., 10000): ")
+            goal = input("📋 Enter the target portfolio value in USD: ")
 
     return goal
 
@@ -83,7 +83,9 @@ if __name__ == "__main__":
     current_ids = {item["symbol"]: item["id"] for item in current_ids["data"]}
 
     # Get token information from user input.
+    print(colorama.Fore.YELLOW + "🤑 FIRST TOKEN 🤑")
     FIRST_TOKEN, FIRST_TOKEN_QUANTITY = get_token_info(current_ids)
+    print(colorama.Fore.YELLOW + "\n🤑 SECOND TOKEN 🤑")
     SECOND_TOKEN, SECOND_TOKEN_QUANTITY = get_token_info(current_ids)
 
     # Verify the two token symbols are different.
