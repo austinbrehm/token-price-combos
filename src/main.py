@@ -154,7 +154,7 @@ if __name__ == "__main__":
     # Plot the price combinations.
     print("Plotting token price combinations...")
 
-    util.plot(
+    filename = util.plot(
         first_prices,
         second_prices,
         f"Token price combos to reach ${GOAL:,} with "
@@ -168,5 +168,7 @@ if __name__ == "__main__":
         colorama.Fore.GREEN
         + "✅ Done! "
         + colorama.Style.RESET_ALL
-        + "Plot saved to 'images/price_combos.png'."
+        + "Plot saved to "
+        + colorama.Fore.BLUE
+        + f"{filename}"
     )
