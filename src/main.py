@@ -83,9 +83,9 @@ if __name__ == "__main__":
     current_ids = {item["symbol"]: item["id"] for item in current_ids["data"]}
 
     # Get token information from user input.
-    print(colorama.Fore.YELLOW + "🤑 FIRST TOKEN 🤑")
+    print(colorama.Fore.BLUE + "FIRST TOKEN")
     FIRST_TOKEN, FIRST_TOKEN_QUANTITY = get_token_info(current_ids)
-    print(colorama.Fore.YELLOW + "\n🤑 SECOND TOKEN 🤑")
+    print(colorama.Fore.BLUE + "\nSECOND TOKEN")
     SECOND_TOKEN, SECOND_TOKEN_QUANTITY = get_token_info(current_ids)
 
     # Verify the two token symbols are different.
@@ -137,14 +137,14 @@ if __name__ == "__main__":
     # Calculate required token prices to reach target portfolio value.
     ratio = token_prices[FIRST_TOKEN] / token_prices[SECOND_TOKEN]
     future_token_prices = solver.calculate_prices(
-        GOAL, HOLDINGS[SECOND_TOKEN], HOLDINGS[FIRST_TOKEN], ratio
+        GOAL, HOLDINGS[FIRST_TOKEN], HOLDINGS[SECOND_TOKEN], ratio
     )
 
     first_prices = [token_prices[FIRST_TOKEN]]
     second_prices = [token_prices[SECOND_TOKEN]]
     for ratio in np.arange(ratio / 10, ratio, ratio / 10):
         future_token_prices = solver.calculate_prices(
-            GOAL, HOLDINGS[SECOND_TOKEN], HOLDINGS[FIRST_TOKEN], ratio
+            GOAL, HOLDINGS[FIRST_TOKEN], HOLDINGS[SECOND_TOKEN], ratio
         )
 
         first_price = future_token_prices[0]
@@ -174,3 +174,5 @@ if __name__ == "__main__":
         + colorama.Fore.BLUE
         + f"{filename}"
     )
+
+    # TODO: print one of the combinations to the terminal

@@ -20,7 +20,7 @@ def calculate_prices(
     Returns:
         prices (np.array): Array containing the required price for both tokens.
     """
-    a = np.array([[token_2, token_1], [-1, price_ratio]])
+    a = np.array([[token_1, token_2], [-1, price_ratio]])
     b = np.array([target, 0])
     prices = np.linalg.solve(a, b)
 
