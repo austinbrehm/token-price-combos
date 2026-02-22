@@ -20,6 +20,12 @@ def calculate_prices(
     Returns:
         prices (np.array): Array containing the required price for both tokens.
     """
+    # Validate inputs.
+    args = [target, token_1, token_2, price_ratio]
+    for arg in args:
+        if arg <= 0:
+            raise ValueError("Values must be greater than zero.")
+
     a = np.array([[token_1, token_2], [-1, price_ratio]])
     b = np.array([target, 0])
     prices = np.linalg.solve(a, b)
