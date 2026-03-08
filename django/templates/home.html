@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Token Price Combos</h1>
+    <p>Generate cryptocurrency token price combinations to hit a portfolio goal.</p>
+    <div class="buttons">
+        <a href="{% url 'tokens' %}" class="btn btn-primary">Start</a>
+        <a href="{% url 'admin:index' %}" class="btn btn-secondary">Admin Panel</a>
+    </div>
+</div>
+{% endblock %}

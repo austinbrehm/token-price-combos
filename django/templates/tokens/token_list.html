@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="tokens-page">
+    <h1>Tokens</h1>
+
+    {% if form_errors %}
+    <ul class="form-errors" role="alert">
+        {% for error in form_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form class="portfolio-form" method="get" action="">
+        <div class="form-row">
+            <label>
+                <span class="label-text">First token symbol</span>
+                <input type="text" name="first_token_symbol" value="{{ form_data.first_token_symbol }}" placeholder="e.g. BTC">
+            </label>
+            <label>
+                <span class="label-text">First token holdings</span>
+                <input type="number" name="first_token_holdings" value="{{ form_data.first_token_holdings }}" step="any" min="0" placeholder="0">
+            </label>
+        </div>
+        <div class="form-row">
+            <label>
+                <span class="label-text">Second token symbol</span>
+                <input type="text" name="second_token_symbol" value="{{ form_data.second_token_symbol }}" placeholder="e.g. ETH">
+            </label>
+            <label>
+                <span class="label-text">Second token holdings</span>
+                <input type="number" name="second_token_holdings" value="{{ form_data.second_token_holdings }}" step="any" min="0" placeholder="0">
+            </label>
+        </div>
+        <div class="form-row form-row-single">
+            <label>
+                <span class="label-text">Target portfolio value</span>
+                <input type="number" name="target_portfolio_value" value="{{ form_data.target_portfolio_value }}" step="any" min="0" placeholder="0">
+            </label>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Plot</button>
+        </div>
+    </form>
+
+    <ul class="token-list">
+        {% for token in tokens %}
+        <li><span class="token-name">{{ token.name }}</span><span class="token-price">${{ token.price }}</span></li>
+        {% endfor %}
+    </ul>
+
+    <h2>Price Plot</h2>
+    <div class="plot-container">
+        {% if plot_data_url %}
+        <img src="{{ plot_data_url }}" alt="Token Price Plot">
+        {% else %}
+        <img src="{% url 'tokens' %}{% if plot_query %}?{{ plot_query }}{% endif %}" alt="Token Price Plot">
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
