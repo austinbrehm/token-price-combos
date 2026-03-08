@@ -390,6 +390,17 @@ p {
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
+.plot-container .current-prices {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--card-text);
+}
+
+.plot-container .current-price {
+    color: var(--accent);
+}
+
 .plot-container img {
     display: block;
     max-width: 100%;

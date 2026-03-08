@@ -52,6 +52,13 @@
 
     <h2>Price Plot</h2>
     <div class="plot-container">
+        {% if current_prices %}
+        <p class="current-prices">
+            {% for symbol, price in current_prices.items %}
+            <span class="current-price">{{ symbol }}: ${{ price|floatformat:2 }}</span>{% if not forloop.last %} · {% endif %}
+            {% endfor %}
+        </p>
+        {% endif %}
         {% if plot_data_url %}
         <img src="{{ plot_data_url }}" alt="Token Price Plot">
         {% else %}

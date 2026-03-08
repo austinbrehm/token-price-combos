@@ -27,10 +27,11 @@ def index(request):
 
 
 def _validate_and_get_plot(form_data):
-    """Run same validation as src/main.py; return (form_errors, plot_data_url).
+    """Run same validation as src/main.py; return (form_errors, plot_data_url, current_prices).
 
     form_errors: list of error messages (from ValueError in generate_plot_bytes).
     plot_data_url: data URL for PNG when valid, else None.
+    current_prices: dict {symbol: price} when valid, else None.
     """
     first_symbol = (form_data.get('first_token_symbol') or '').strip()
     second_symbol = (form_data.get('second_token_symbol') or '').strip()
@@ -49,20 +50,20 @@ def _validate_and_get_plot(form_data):
     # Require all fields
     if not all([first_symbol, first_holdings is not None, second_symbol,
                 second_holdings is not None, target is not None]):
-        return (['Please fill in all fields: both token symbols, both holdings, and target portfolio value.'], None)
+        return (['Please fill in all fields: both token symbols, both holdings, and target portfolio value.'], None, None)
 
     # Same rules as main.py: positive values, different symbols
     if first_holdings <= 0 or second_holdings <= 0 or target <= 0:
-        return (['Holdings and target must be positive.'], None)
+        return (['Holdings and target must be positive.'], None, None)
     if first_symbol.upper() == second_symbol.upper():
-        return (['First and second token symbols must be different.'], None)
+        return (['First and second token symbols must be different.'], None, None)
 
     # Run full validation and plot generation (same as main.py generate_plot_bytes)
     if str(SRC_DIR) not in sys.path:
         sys.path.insert(0, str(SRC_DIR))
     try:
         from main import generate_plot_bytes
-        png_bytes = generate_plot_bytes(
+        png_bytes, token_prices = generate_plot_bytes(
             first_symbol,
             first_holdings,
             second_symbol,
@@ -71,16 +72,15 @@ def _validate_and_get_plot(form_data):
             env_dir=str(PROJECT_ROOT),
         )
         data_url = 'data:image/png;base64,' + base64.b64encode(png_bytes).decode('ascii')
-        return ([], data_url)
+        return ([], data_url, token_prices)
     except ValueError as e:
-        return ([str(e)], None)
+        return ([str(e)], None, None)
     except Exception as e:
         logger.warning("Validation/plot failed: %s", e)
-        return ([f'Something went wrong: {e}'], None)
+        return ([f'Something went wrong: {e}'], None, None)
 
 
 def token_list(request):
-    #tokens = Token.objects.all()
     plot_query = request.GET.urlencode()
     form_data = {
         'first_token_symbol': request.GET.get('first_token_symbol', ''),
@@ -92,15 +92,16 @@ def token_list(request):
 
     form_errors = []
     plot_data_url = None
+    current_prices = None
     if any(form_data.values()):
-        form_errors, plot_data_url = _validate_and_get_plot(form_data)
+        form_errors, plot_data_url, current_prices = _validate_and_get_plot(form_data)
 
     return render(request, 'tokens/token_list.html', {
-        #'tokens': tokens,
         'plot_query': plot_query,
         'form_data': form_data,
         'form_errors': form_errors,
         'plot_data_url': plot_data_url,
+        'current_prices': current_prices,
     })
 
 
@@ -201,7 +202,7 @@ def _fallback_plot_bytes(
         sys.path.insert(0, str(SRC_DIR))
     try:
         from main import generate_plot_bytes
-        return generate_plot_bytes(
+        png_bytes, _ = generate_plot_bytes(
             first_symbol,
             first_holdings,
             second_symbol,
@@ -209,6 +210,7 @@ def _fallback_plot_bytes(
             target,
             env_dir=str(PROJECT_ROOT),
         )
+        return png_bytes
     except Exception as e:
         logger.warning("Fallback generate_plot_bytes failed: %s", e)
         return None
