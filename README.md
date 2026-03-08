@@ -19,8 +19,15 @@ Built with Python, CoinMarketCap API, and linear algebra.
 1. Save the file
 
 ## Usage
+### Start the Django App
+Run this commmand from root directory: `python3 manage.py runserver`
+
+OR 
+
 ### Run the Script
 Run the main.py script from root directory: `python3 src/main.py`
+
+OR 
 
 ### Run in Docker Container
 1. Create the image from root directory: `docker build -t token-price-combos .` 
