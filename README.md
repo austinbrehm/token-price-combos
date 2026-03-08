@@ -20,7 +20,7 @@ Built with Python, CoinMarketCap API, and linear algebra.
 
 ## Usage
 ### Start the Django App
-Run this commmand from root directory: `python3 manage.py runserver`
+Run this commmand from root directory: `python3 django/manage.py runserver`
 
 OR 
 
