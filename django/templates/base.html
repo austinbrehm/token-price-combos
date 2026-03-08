@@ -20,11 +20,17 @@
 </head>
 <body>
     <header>
-        <h1>Token Price Combos</h1>
+        <h1 class="site-logo">
+            <a href="{% url 'home' %}">
+                <img class="logo-light" src="{% static 'light_mode.png' %}" alt="Token Price Combos">
+                <img class="logo-dark" src="{% static 'dark_mode.png' %}" alt="Token Price Combos">
+            </a>
+        </h1>
         <nav>
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'tokens' %}">Tokens</a></li>
+                <li><a href="{% url 'tokens' %}">Start</a></li>
+                <a href="{% url 'admin:index' %}">Admin</a>
                 <li>
                     <button type="button" class="theme-toggle" aria-label="Toggle dark mode">
                         <svg class="icon-light" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 6 6c0 2.2-1.2 4.1-3 5.2V17a1 1 0 0 1-2 0v-2.8C9.2 13.1 8 11.2 8 9a6 6 0 0 0 4-5.7V3a1 1 0 0 1 2 0v.3z"/><circle cx="12" cy="14" r="3"/></svg>
