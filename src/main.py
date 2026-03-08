@@ -103,7 +103,7 @@ def generate_plot_bytes(
         env_dir: Directory containing .env (for API key). If None, uses current directory.
 
     Returns:
-        PNG image bytes.
+        Tuple of (PNG image bytes, token_prices dict {symbol: price}).
 
     Raises:
         ValueError: On validation error (unknown symbol, same symbol, goal already met).
@@ -157,13 +157,14 @@ def generate_plot_bytes(
         f"{first_holdings:,} {first_symbol} and "
         f"{second_holdings:,} {second_symbol}"
     )
-    return util.plot_to_buffer(
+    png_bytes = util.plot_to_buffer(
         first_prices,
         second_prices,
         title,
-        f"Future Price of {first_symbol} ($)",
-        f"Future Price of {second_symbol} ($)",
+        f"Price of {first_symbol} ($)",
+        f"Price of {second_symbol} ($)",
     )
+    return png_bytes, token_prices
 
 
 def parse_args():
@@ -232,7 +233,7 @@ if __name__ == "__main__":
             sys.exit(1)
         # Web/Django: write plot to file and exit (no terminal output).
         if args.output:
-            png_bytes = generate_plot_bytes(
+            png_bytes, _ = generate_plot_bytes(
                 FIRST_TOKEN,
                 FIRST_TOKEN_QUANTITY,
                 SECOND_TOKEN,
@@ -343,5 +344,3 @@ if __name__ == "__main__":
         + colorama.Fore.BLUE
         + f"{filename}"
     )
-
-    # TODO: print one of the combinations to the terminal
