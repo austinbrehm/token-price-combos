@@ -430,6 +430,45 @@ p {
     border-radius: 4px;
 }
 
+.price-table-container {
+    background: var(--card-bg);
+    padding: 1.25rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow);
+    margin-top: 1.5rem;
+    overflow-x: auto;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.price-table-container h2 {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--card-text);
+}
+
+.price-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--card-text);
+}
+
+.price-table th,
+.price-table td {
+    padding: 0.5rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--card-divider);
+}
+
+.price-table th {
+    font-weight: 600;
+    color: var(--card-label);
+}
+
+.price-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
 /* Footer */
 footer {
     padding: 1rem 2rem;

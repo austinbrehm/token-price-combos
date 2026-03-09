@@ -103,7 +103,7 @@ def generate_plot_bytes(
         env_dir: Directory containing .env (for API key). If None, uses current directory.
 
     Returns:
-        Tuple of (PNG image bytes, token_prices dict {symbol: price}).
+        Tuple of (PNG image bytes, token_prices dict, first_prices list, second_prices list).
 
     Raises:
         ValueError: On validation error (unknown symbol, same symbol, goal already met).
@@ -164,7 +164,7 @@ def generate_plot_bytes(
         f"Price of {first_symbol} ($)",
         f"Price of {second_symbol} ($)",
     )
-    return png_bytes, token_prices
+    return png_bytes, token_prices, first_prices, second_prices
 
 
 def parse_args():
@@ -233,7 +233,7 @@ if __name__ == "__main__":
             sys.exit(1)
         # Web/Django: write plot to file and exit (no terminal output).
         if args.output:
-            png_bytes, _ = generate_plot_bytes(
+            png_bytes, *_ = generate_plot_bytes(
                 FIRST_TOKEN,
                 FIRST_TOKEN_QUANTITY,
                 SECOND_TOKEN,

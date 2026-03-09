@@ -48,8 +48,10 @@
         {% endfor %}
         </ul>
         <div class="plot-container">
+            <h2>Plot</h2>
             {% if current_prices %}
             <p class="current-prices">
+                Current Prices: 
                 {% for symbol, price in current_prices.items %}
                 <span class="current-price">{{ symbol }}: ${{ price|floatformat:2 }}</span>{% if not forloop.last %} · {% endif %}
                 {% endfor %}
@@ -61,6 +63,29 @@
             <img src="{% url 'tokens' %}{% if plot_query %}?{{ plot_query }}{% endif %}" alt="">
             {% endif %}
         </div>
+        {% if price_rows %}
+        <div class="price-table-container">
+            <h2>Price combinations</h2>
+            <table class="price-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Price of {{ first_symbol }} ($)</th>
+                        <th>Price of {{ second_symbol }} ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for first_price, second_price in price_rows %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>${{ first_price }}</td>
+                        <td>${{ second_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
     </form>
 </div>
 {% endblock %}

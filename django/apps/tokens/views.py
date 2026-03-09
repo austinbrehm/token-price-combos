@@ -27,11 +27,13 @@ def index(request):
 
 
 def _validate_and_get_plot(form_data):
-    """Run same validation as src/main.py; return (form_errors, plot_data_url, current_prices).
+    """Run same validation as src/main.py; return (form_errors, plot_data_url, current_prices, first_prices, second_prices, first_symbol, second_symbol).
 
     form_errors: list of error messages (from ValueError in generate_plot_bytes).
     plot_data_url: data URL for PNG when valid, else None.
     current_prices: dict {symbol: price} when valid, else None.
+    first_prices, second_prices: lists of price combos when valid, else None.
+    first_symbol, second_symbol: token symbols (from form_data).
     """
     first_symbol = (form_data.get('first_token_symbol') or '').strip()
     second_symbol = (form_data.get('second_token_symbol') or '').strip()
@@ -47,23 +49,26 @@ def _validate_and_get_plot(form_data):
     except (TypeError, ValueError):
         first_holdings = second_holdings = target = None
 
+    first_symbol = first_symbol.strip().upper() if first_symbol else ''
+    second_symbol = second_symbol.strip().upper() if second_symbol else ''
+
     # Require all fields
     if not all([first_symbol, first_holdings is not None, second_symbol,
                 second_holdings is not None, target is not None]):
-        return (['Please fill in all fields: both token symbols, both holdings, and target portfolio value.'], None, None)
+        return (['Please fill in all fields: both token symbols, both holdings, and target portfolio value.'], None, None, None, None, first_symbol or '', second_symbol or '')
 
     # Same rules as main.py: positive values, different symbols
     if first_holdings <= 0 or second_holdings <= 0 or target <= 0:
-        return (['Holdings and target must be positive.'], None, None)
-    if first_symbol.upper() == second_symbol.upper():
-        return (['First and second token symbols must be different.'], None, None)
+        return (['Holdings and target must be positive.'], None, None, None, None, first_symbol, second_symbol)
+    if first_symbol == second_symbol:
+        return (['First and second token symbols must be different.'], None, None, None, None, first_symbol, second_symbol)
 
     # Run full validation and plot generation (same as main.py generate_plot_bytes)
     if str(SRC_DIR) not in sys.path:
         sys.path.insert(0, str(SRC_DIR))
     try:
         from main import generate_plot_bytes
-        png_bytes, token_prices = generate_plot_bytes(
+        png_bytes, token_prices, first_prices, second_prices = generate_plot_bytes(
             first_symbol,
             first_holdings,
             second_symbol,
@@ -72,12 +77,12 @@ def _validate_and_get_plot(form_data):
             env_dir=str(PROJECT_ROOT),
         )
         data_url = 'data:image/png;base64,' + base64.b64encode(png_bytes).decode('ascii')
-        return ([], data_url, token_prices)
+        return ([], data_url, token_prices, first_prices, second_prices, first_symbol, second_symbol)
     except ValueError as e:
-        return ([str(e)], None, None)
+        return ([str(e)], None, None, None, None, first_symbol, second_symbol)
     except Exception as e:
         logger.warning("Validation/plot failed: %s", e)
-        return ([f'Something went wrong: {e}'], None, None)
+        return ([f'Something went wrong: {e}'], None, None, None, None, first_symbol, second_symbol)
 
 
 def token_list(request):
@@ -93,8 +98,19 @@ def token_list(request):
     form_errors = []
     plot_data_url = None
     current_prices = None
+    first_prices = None
+    second_prices = None
+    first_symbol = ''
+    second_symbol = ''
     if any(form_data.values()):
-        form_errors, plot_data_url, current_prices = _validate_and_get_plot(form_data)
+        form_errors, plot_data_url, current_prices, first_prices, second_prices, first_symbol, second_symbol = _validate_and_get_plot(form_data)
+
+    price_rows = None
+    if first_prices is not None and second_prices is not None:
+        price_rows = [
+            (f"{p1:,.2f}", f"{p2:,.2f}")
+            for p1, p2 in zip(first_prices, second_prices)
+        ]
 
     return render(request, 'tokens/token_list.html', {
         'plot_query': plot_query,
@@ -102,6 +118,9 @@ def token_list(request):
         'form_errors': form_errors,
         'plot_data_url': plot_data_url,
         'current_prices': current_prices,
+        'price_rows': price_rows,
+        'first_symbol': first_symbol,
+        'second_symbol': second_symbol,
     })
 
 
@@ -202,7 +221,7 @@ def _fallback_plot_bytes(
         sys.path.insert(0, str(SRC_DIR))
     try:
         from main import generate_plot_bytes
-        png_bytes, _ = generate_plot_bytes(
+        png_bytes, *_ = generate_plot_bytes(
             first_symbol,
             first_holdings,
             second_symbol,
