@@ -106,11 +106,17 @@ def token_list(request):
         form_errors, plot_data_url, current_prices, first_prices, second_prices, first_symbol, second_symbol = _validate_and_get_plot(form_data)
 
     price_rows = None
+    ideal_prices = None
+    price_difference = None
     if first_prices is not None and second_prices is not None:
         price_rows = [
             (f"{p1:,.2f}", f"{p2:,.2f}")
-            for p1, p2 in zip(first_prices, second_prices)
+            for p1, p2 in zip(first_prices[1:], second_prices[1:])
         ]
+        ideal_prices = {first_symbol: first_prices[5], second_symbol: second_prices[5]}
+        first_diff = (ideal_prices[first_symbol] - current_prices[first_symbol]) / current_prices[first_symbol] * 100
+        second_diff = (ideal_prices[second_symbol] - current_prices[second_symbol]) / current_prices[second_symbol] * 100
+        price_difference = {first_symbol: first_diff, second_symbol: second_diff}
 
     return render(request, 'tokens/token_list.html', {
         'plot_query': plot_query,
@@ -119,6 +125,9 @@ def token_list(request):
         'plot_data_url': plot_data_url,
         'current_prices': current_prices,
         'price_rows': price_rows,
+        'ideal_prices': ideal_prices,
+        'price_difference': price_difference,
+        'target_value': form_data['target_portfolio_value'],
         'first_symbol': first_symbol,
         'second_symbol': second_symbol,
     })

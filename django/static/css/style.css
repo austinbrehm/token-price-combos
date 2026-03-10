@@ -402,7 +402,7 @@ p {
     font-style: italic;
 }
 
-.plot-container {
+.summary-container {
     background: var(--card-bg);
     padding: 1.25rem;
     border-radius: 8px;
@@ -412,15 +412,32 @@ p {
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-.plot-container .current-prices {
+.summary-container img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.summary-container .current-prices {
     margin-bottom: 1rem;
     font-size: 1rem;
     font-weight: 500;
     color: var(--card-text);
 }
 
-.plot-container .current-price {
+.summary-container .current-price {
     color: var(--accent);
+}
+
+.plot-container {
+    background: var(--card-bg);
+    padding: 1.25rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow);
+    margin-top: 1.5rem;
+    overflow: hidden;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .plot-container img {
