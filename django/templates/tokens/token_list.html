@@ -79,21 +79,21 @@
             {% if current_prices %}
             <p class="current-prices">
                 <h2>Analysis 📈</h2>
-                <h4>Current Prices</h4>
+                <h4>Current Price</h4>
                 {% for symbol, price in current_prices.items %}
-                <span class="current-price">{{ symbol }}: ${{ price|floatformat:2 }}</span>{% if not forloop.last %} , {% endif %}
+                <span class="current-price">{{ symbol }}: ${{ price|floatformat:2 }}</span>{% if not forloop.last %} · {% endif %}
                 {% endfor %}
                 <br>
                 <br>
                 <h4>Ideal Price Combo</h4>
                 {% for symbol, price in ideal_prices.items %}
-                <span class="current-price">{{ symbol }}: ${{ price|floatformat:2 }}</span>{% if not forloop.last %} , {% endif %}
+                <span class="current-price">{{ symbol }}: ${{ price|floatformat:2 }}</span>{% if not forloop.last %} · {% endif %}
                 {% endfor %}
                 </br>
                 <br>
                 To hit the ideal price combo for the portfolio goal, 
                 {% for symbol, diff in price_difference.items %}
-                <span class="current-price">{{ symbol }} needs to increase {{ diff|floatformat:2 }}%</span>{% if not forloop.last %} and {% endif %}
+                <span class="current-price">{{ symbol }} needs to increase {{ diff|floatformat:0 }}%</span>{% if not forloop.last %} and {% endif %}
                 {% endfor %}
                 from current prices.
             </p>
