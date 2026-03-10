@@ -49,7 +49,7 @@
         </ul>
         {% if price_rows %}
         <div class="price-table-container">
-            <h2>Price combinations</h2>
+            <h2>Price Combinations 📊</h2>
             <table class="price-table">
                 <thead>
                     <tr>
@@ -67,7 +67,6 @@
                 </tbody>
             </table>
         </div>
-        {% endif %}
         <div class="plot-container">
             {% if plot_data_url %}
             <img src="{{ plot_data_url }}" alt="">
@@ -75,10 +74,11 @@
             <img src="{% url 'tokens' %}{% if plot_query %}?{{ plot_query }}{% endif %}" alt="">
             {% endif %}
         </div>
+        {% endif %}
         <div class="summary-container">
             {% if current_prices %}
             <p class="current-prices">
-                <h2>Analysis</h2>
+                <h2>Analysis 📈</h2>
                 <h4>Current Prices</h4>
                 {% for symbol, price in current_prices.items %}
                 <span class="current-price">{{ symbol }}: ${{ price|floatformat:2 }}</span>{% if not forloop.last %} , {% endif %}
@@ -91,7 +91,6 @@
                 {% endfor %}
                 </br>
                 <br>
-                <h4>Conclusion</h4>
                 To hit the ideal price combo for the portfolio goal, 
                 {% for symbol, diff in price_difference.items %}
                 <span class="current-price">{{ symbol }} needs to increase {{ diff|floatformat:2 }}%</span>{% if not forloop.last %} and {% endif %}
